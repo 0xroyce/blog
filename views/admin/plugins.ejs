@@ -1,0 +1,38 @@
+<%- include('../partials/header') %>
+
+<div class="container">
+    <h1>Plugins</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Version</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% if (plugins.length > 0) { %>
+            <% plugins.forEach(plugin => { %>
+                <tr>
+                    <td><%= plugin.name %></td>
+                    <td><%= plugin.version %></td>
+                    <td><%= plugin.description %></td>
+                    <td><%= plugin.isEnabled ? 'Enabled' : 'Disabled' %></td>
+                    <td>
+                        <a href="/admin/plugins/<%= plugin.name.toLowerCase().replace(/\s+/g, '-') %>">Configure</a>
+                    </td>
+                </tr>
+            <% }); %>
+        <% } else { %>
+            <tr>
+                <td colspan="5">No plugins found</td>
+            </tr>
+        <% } %>
+        </tbody>
+    </table>
+</div>
+
+<%- include('../partials/footer') %>

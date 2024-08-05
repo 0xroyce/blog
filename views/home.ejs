@@ -1,0 +1,50 @@
+<%- include('partials/header') %>
+
+<div class="container">
+    <% if (typeof tagName !== 'undefined') { %>
+        <h2>Articles tagged with: <%= tagName %></h2>
+    <% } %>
+
+    <% if (articles.length > 0) { %>
+        <% articles.forEach(article => { %>
+            <article class="article-preview">
+                <h2><a href="/article/<%= article.slug %>"><%= article.title %></a></h2>
+                <p class="meta">
+                    By <%= article.author %> on <%= new Date(article.created_at).toLocaleDateString() %>
+                    <% if (isViewCountEnabled && isShowViewCountEnabled) { %>
+                        | Views: <%= article.view_count %>
+                    <% } %>
+                </p>
+                <div class="tags">
+                    <% article.tags.forEach(tag => { %>
+                        <a href="/tag/<%= tag.name.toLowerCase() %>" class="tag"><%= tag.name %></a>
+                    <% }) %>
+                </div>
+                <% if (article.main_image) { %>
+                    <img src="<%= article.main_image %>" alt="<%= article.title %>" class="article-preview-image">
+                <% } %>
+                <p class="excerpt"><%= helpers.createExcerpt(article.content) %></p>
+            </article>
+        <% }) %>
+
+        <div class="pagination">
+            <% if (page > 1) { %>
+                <a href="?page=<%= page - 1 %>">Previous</a>
+            <% } %>
+            <% for(let i = 1; i <= totalPages; i++) { %>
+                <% if (i === page) { %>
+                    <span class="current-page"><%= i %></span>
+                <% } else { %>
+                    <a href="?page=<%= i %>"><%= i %></a>
+                <% } %>
+            <% } %>
+            <% if (page < totalPages) { %>
+                <a href="?page=<%= page + 1 %>">Next</a>
+            <% } %>
+        </div>
+    <% } else { %>
+        <p>No articles found.</p>
+    <% } %>
+</div>
+
+<%- include('partials/footer') %>

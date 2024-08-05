@@ -1,0 +1,43 @@
+<%- include('partials/header') %>
+
+<div class="container">
+    <article>
+        <h1><%= article.title %></h1>
+        <p class="meta">
+            By <%= article.author %> on <%= new Date(article.created_at).toLocaleDateString() %>
+            <% if (isViewCountEnabled && isShowViewCountEnabled) { %>
+                | Views: <%= article.view_count %>
+            <% } %>
+        </p>
+
+        <div class="tags">
+            <% article.tags.forEach(tag => { %>
+                <a href="/tag/<%= tag.name.toLowerCase() %>" class="tag"><%= tag.name %></a>
+            <% }) %>
+        </div>
+
+        <% if (article.main_image) { %>
+            <div class="main-image">
+                <img src="<%= article.main_image %>" alt="<%= article.title %>" style="max-width: 100%; height: auto;">
+            </div>
+        <% } %>
+
+        <div class="article-content">
+            <%- article.content %>
+        </div>
+    </article>
+
+    <a href="/" class="back-link">Back to Home</a>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-markup.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+<script>
+    Prism.highlightAll();
+</script>
+
+<%- include('partials/footer') %>

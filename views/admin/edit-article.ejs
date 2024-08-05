@@ -1,0 +1,87 @@
+<%- include('../partials/header') %>
+
+<div class="container">
+    <h1>Edit Article</h1>
+
+    <form id="articleForm" action="/admin/edit/<%= article.id %>" method="POST" enctype="multipart/form-data">
+        <div>
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" value="<%= article.title %>" required>
+        </div>
+        <div>
+            <label for="metaDescription">Meta Description:</label>
+            <textarea id="metaDescription" name="metaDescription" maxlength="160"><%= article.meta_description %></textarea>
+            <p>Characters left: <span id="charCount"><%= 160 - article.meta_description.length %></span></p>
+        </div>
+        <div>
+            <label for="mainImage">Main Image:</label>
+            <input type="file" id="mainImage" name="mainImage" accept="image/*">
+            <% if (article.main_image) { %>
+                <div>
+                    <img src="<%= article.main_image %>" alt="Current main image" style="max-width: 200px;">
+                    <input type="hidden" name="existingImage" value="<%= article.main_image %>">
+                    <label>
+                        <input type="checkbox" name="removeImage" value="true"> Remove current image
+                    </label>
+                </div>
+            <% } %>
+        </div>
+        <div>
+            <label for="content">Content:</label>
+            <textarea id="content" name="content"><%= article.content %></textarea>
+        </div>
+        <div>
+            <label for="tags">Tags (comma-separated):</label>
+            <input type="text" id="tags" name="tags" value="<%= article.tags.map(t => t.name).join(', ') %>">
+        </div>
+        <div>
+            <label for="publishedAt">Publication Date:</label>
+            <input type="datetime-local" id="publishedAt" name="publishedAt" value="<%= article.published_at ? new Date(article.published_at).toISOString().slice(0, 16) : '' %>">
+        </div>
+        <div>
+            <label>
+                <input type="checkbox" name="saveAsDraft" <%= article.is_draft ? 'checked' : '' %>> Save as Draft
+            </label>
+        </div>
+        <button type="submit">Update Article</button>
+    </form>
+
+    <script src="https://cdn.tiny.cloud/1/<%= tinyMceApiKey %>/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: '#content',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage tableofcontents footnotes mergetags autocorrect typography inlinecss',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | codesample | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+            tinycomments_mode: 'embedded',
+            tinycomments_author: 'Author name',
+            mergetags_list: [
+                { value: 'First.Name', title: 'First Name' },
+                { value: 'Email', title: 'Email' },
+            ],
+            ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+            setup: function(editor) {
+                editor.on('change', function() {
+                    editor.save();
+                });
+            }
+        });
+
+        document.querySelector('#articleForm').addEventListener('submit', function(event) {
+            if (tinymce.get('content').getContent().trim() === '') {
+                event.preventDefault();
+                alert('The content cannot be empty.');
+            }
+        });
+
+        // Meta description character count
+        const metaDescription = document.getElementById('metaDescription');
+        const charCount = document.getElementById('charCount');
+
+        metaDescription.addEventListener('input', function() {
+            const remaining = 160 - this.value.length;
+            charCount.textContent = remaining;
+        });
+    </script>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= settings.blog_title %></title>
+    <meta name="description" content="<%= settings.meta_description %>">
+    <link rel="icon" href="<%= settings.favicon_path %>" type="image/x-icon">
+    <link rel="stylesheet" href="/css/style.css">
+    <%- settings.custom_javascript %>
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <div class="blog-title">
+            <h1><a href="/"><%= settings.blog_title %></a></h1>
+        </div>
+        <nav>
+            <ul class="main-menu">
+                <% function renderMenuItems(items) { %>
+                    <% items.forEach(item => { %>
+                        <li <% if (item.children && item.children.length > 0) { %>class="has-dropdown"<% } %>>
+                            <a href="<%= item.url %>"><%= item.title %></a>
+                            <% if (item.children && item.children.length > 0) { %>
+                                <ul class="dropdown">
+                                    <%= renderMenuItems(item.children) %>
+                                </ul>
+                            <% } %>
+                        </li>
+                    <% }) %>
+                <% } %>
+                <%= renderMenuItems(menuItems) %>
+                <% if (locals.user) { %>
+                    <li><a href="/admin/dashboard">Dashboard</a></li>
+                    <li><a href="/admin/menu">Manage Menu</a></li>
+                    <li><a href="/auth/logout">Logout</a></li>
+                <% } else if (settings.show_login_button === 'true') { %>
+                    <li><a href="/auth/login">Login</a></li>
+                <% } %>
+            </ul>
+        </nav>
+        <div class="search-form">
+            <form action="/search" method="GET">
+                <input type="text" name="q" placeholder="Search articles..." required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+</header>
+<main>
