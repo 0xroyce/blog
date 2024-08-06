@@ -52,11 +52,11 @@ Configuration
 Copy the env_template file to .env in the root directory.
 Edit the .env file and fill in your specific configuration details:
 
-DB_HOST=your_database_host
-DB_USER=your_database_user
-DB_PASSWORD=your_database_password
-DB_NAME=your_database_name
-TINYMCE_API_KEY=your_tinymce_api_key
+- DB_HOST=your_database_host
+- DB_USER=your_database_user
+- DB_PASSWORD=your_database_password
+- DB_NAME=your_database_name
+- TINYMCE_API_KEY=your_tinymce_api_key
 
 Set up your database using the provided SQL script.
 
