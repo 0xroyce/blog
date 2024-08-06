@@ -1,40 +1,44 @@
 <%- include('../partials/header') %>
 
-<div class="container">
+<div class="container article-form">
     <h1>Create New Article</h1>
 
     <form id="articleForm" action="/admin/create" method="POST" enctype="multipart/form-data">
-        <div>
-            <label for="title">Title:</label>
-            <input type="text" id="title" name="title" required>
+        <div class="main-content">
+            <div>
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div>
+                <label for="metaDescription">Meta Description:</label>
+                <textarea id="metaDescription" name="metaDescription" maxlength="160"></textarea>
+                <p>Characters left: <span id="charCount">160</span></p>
+            </div>
+            <div>
+                <label for="content">Content:</label>
+                <textarea id="content" name="content"></textarea>
+            </div>
         </div>
-        <div>
-            <label for="metaDescription">Meta Description:</label>
-            <textarea id="metaDescription" name="metaDescription" maxlength="160"></textarea>
-            <p>Characters left: <span id="charCount">160</span></p>
+        <div class="side-content">
+            <div>
+                <label for="mainImage">Main Image:</label>
+                <input type="file" id="mainImage" name="mainImage" accept="image/*">
+            </div>
+            <div>
+                <label for="tags">Tags (comma-separated):</label>
+                <input type="text" id="tags" name="tags">
+            </div>
+            <div>
+                <label for="publishedAt">Publication Date:</label>
+                <input type="datetime-local" id="publishedAt" name="publishedAt">
+            </div>
+            <div>
+                <label>
+                    <input type="checkbox" name="saveAsDraft"> Save as Draft
+                </label>
+            </div>
+            <button type="submit">Create Article</button>
         </div>
-        <div>
-            <label for="mainImage">Main Image:</label>
-            <input type="file" id="mainImage" name="mainImage" accept="image/*">
-        </div>
-        <div>
-            <label for="content">Content:</label>
-            <textarea id="content" name="content"></textarea>
-        </div>
-        <div>
-            <label for="tags">Tags (comma-separated):</label>
-            <input type="text" id="tags" name="tags">
-        </div>
-        <div>
-            <label for="publishedAt">Publication Date:</label>
-            <input type="datetime-local" id="publishedAt" name="publishedAt">
-        </div>
-        <div>
-            <label>
-                <input type="checkbox" name="saveAsDraft" <%= locals.article && article.is_draft ? 'checked' : '' %>> Save as Draft
-            </label>
-        </div>
-        <button type="submit">Create Article</button>
     </form>
 
     <script src="https://cdn.tiny.cloud/1/<%= tinyMceApiKey %>/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
@@ -50,6 +54,7 @@
                 { value: 'Email', title: 'Email' },
             ],
             ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+            height: 500,
             setup: function(editor) {
                 editor.on('change', function() {
                     editor.save();

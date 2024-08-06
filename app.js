@@ -30,12 +30,18 @@ app.use(flash());
 // Initialize plugin loader
 const pluginLoader = new PluginLoader(app);
 
+// Make pluginLoader available to the entire application
+app.set('pluginLoader', pluginLoader);
+
 // Load plugins
-pluginLoader.loadPlugins().then(() => {
-    console.log('Plugins loaded successfully');
-}).catch(err => {
-    console.error('Error loading plugins:', err);
-});
+(async () => {
+    try {
+        await pluginLoader.loadPlugins();
+        console.log('Plugins loaded successfully');
+    } catch (err) {
+        console.error('Error loading plugins:', err);
+    }
+})();
 
 // Add user to res.locals for use in views
 app.use((req, res, next) => {
@@ -68,7 +74,9 @@ app.use('/', articleRoutes);
 app.use('/auth', authRoutes);
 
 // Execute 'after_routes' hook for plugins
-pluginLoader.executeHook('after_routes', app);
+(async () => {
+    await pluginLoader.executeHook('after_routes', app);
+})();
 
 // Error handling middleware
 app.use((err, req, res, next) => {

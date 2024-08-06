@@ -5,13 +5,16 @@ module.exports = {
     version: '1.2.0',
     description: 'Adds a configurable image to the middle of each article',
 
-    init: async function(pluginLoader) {
-        const isEnabled = await SiteSetting.getPluginStatus(this.name);
-        if (isEnabled) {
-            pluginLoader.registerHook('modify_article_content', this.addMidArticleImage);
-            pluginLoader.addRoute('get', '/admin/plugins/mid-article-image', this.renderConfigPage);
-            pluginLoader.addRoute('post', '/admin/plugins/mid-article-image', this.updateConfig);
-        }
+    enable: async function(pluginLoader) {
+        pluginLoader.registerHook('modify_article_content', this.name, this.addMidArticleImage);
+        pluginLoader.addRoute('get', '/admin/plugins/mid-article-image', this.name, this.renderConfigPage);
+        pluginLoader.addRoute('post', '/admin/plugins/mid-article-image', this.name, this.updateConfig);
+    },
+
+    disable: async function(pluginLoader) {
+        pluginLoader.unregisterHook('modify_article_content', this.name);
+        pluginLoader.removeRoute('get', '/admin/plugins/mid-article-image');
+        pluginLoader.removeRoute('post', '/admin/plugins/mid-article-image');
     },
 
     addMidArticleImage: async function(article) {
@@ -42,6 +45,15 @@ module.exports = {
         const { imageUrl, isEnabled } = req.body;
         await SiteSetting.set('mid_article_image_url', imageUrl);
         await SiteSetting.setPluginStatus('Mid-Article Image', isEnabled === 'on');
+
+        // Dynamically enable or disable the plugin
+        const pluginLoader = req.app.get('pluginLoader');
+        if (isEnabled === 'on') {
+            await pluginLoader.enablePlugin('Mid-Article Image');
+        } else {
+            await pluginLoader.disablePlugin('Mid-Article Image');
+        }
+
         res.redirect('/admin/plugins');
     }
 };
