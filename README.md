@@ -1,6 +1,6 @@
 # 0xroyce_blog
 
-A flexible and feature-rich blog platform application with plugin support and built-in analytics.
+A flexible and feature-rich blog platform application with plugin support, templates support and built-in analytics.
 
 ## Table of Contents
 - [Description](#description)
@@ -16,7 +16,7 @@ A flexible and feature-rich blog platform application with plugin support and bu
 
 ## Description
 
-0xroyce_blog is a powerful and customizable blog platform that allows users to create, edit, and manage blog posts. It features a robust admin interface, built-in analytics, and support for custom plugins, making it suitable for both personal blogs and larger content management needs.
+Blog is a powerful and customizable blog platform that allows users to create, edit, and manage blog posts. It features a robust admin interface, built-in analytics, support for custom plugins, and support for templates, making it suitable for both personal blogs and larger content management needs.
 
 ## Features
 
