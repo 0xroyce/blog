@@ -6,11 +6,7 @@
     <title><%= settings.blog_title %></title>
     <meta name="description" content="<%= settings.meta_description %>">
     <link rel="icon" href="<%= settings.favicon_path %>" type="image/x-icon">
-    <% if (templateName && templateName !== 'default') { %>
-        <link rel="stylesheet" href="/css/<%= templateName %>.css">
-    <% } else { %>
-        <link rel="stylesheet" href="/css/style.css">
-    <% }%>
+    <link rel="stylesheet" href="/css/style.css">
     <%- settings.custom_javascript %>
 </head>
 <body>

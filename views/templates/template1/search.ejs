@@ -1,9 +1,9 @@
-<%- include('partials/header') %>
+<%- include('../../partials/header') %>
+
+<h1>THIS IS TEMPLATE 1</h1>
 
 <div class="container">
-    <% if (typeof tagName !== 'undefined') { %>
-        <h2>Articles tagged with: <%= tagName %></h2>
-    <% } %>
+    <h1>Search Results for "<%= query %>"</h1>
 
     <% if (articles.length > 0) { %>
         <% articles.forEach(article => { %>
@@ -29,22 +29,22 @@
 
         <div class="pagination">
             <% if (page > 1) { %>
-                <a href="?page=<%= page - 1 %>">Previous</a>
+                <a href="?q=<%= query %>&page=<%= page - 1 %>">Previous</a>
             <% } %>
             <% for(let i = 1; i <= totalPages; i++) { %>
                 <% if (i === page) { %>
                     <span class="current-page"><%= i %></span>
                 <% } else { %>
-                    <a href="?page=<%= i %>"><%= i %></a>
+                    <a href="?q=<%= query %>&page=<%= i %>"><%= i %></a>
                 <% } %>
             <% } %>
             <% if (page < totalPages) { %>
-                <a href="?page=<%= page + 1 %>">Next</a>
+                <a href="?q=<%= query %>&page=<%= page + 1 %>">Next</a>
             <% } %>
         </div>
     <% } else { %>
-        <p>No articles found.</p>
+        <p>No articles found matching your search.</p>
     <% } %>
 </div>
 
-<%- include('partials/footer') %>
+<%- include('../../partials/footer') %>

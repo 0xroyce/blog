@@ -9,7 +9,7 @@ async function executeQueryWithRetry(query, params, retries = 5) {
         } catch (error) {
             attempts += 1;
             console.error(`Retrying query (attempt ${attempts})...`);
-            if (error.code === 'ECONNRESET' && attempts < retries) {
+            if (['ECONNRESET', 'PROTOCOL_CONNECTION_LOST'].includes(error.code) && attempts < retries) {
                 console.warn('Connection was reset, retrying...');
                 await new Promise(res => setTimeout(res, 1000 * attempts)); // Exponential backoff
             } else {

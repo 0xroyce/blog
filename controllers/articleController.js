@@ -1,8 +1,16 @@
 const Article = require('../models/article');
 const Tag = require('../models/tag');
 const Statistic = require('../models/statistic');
+const Template = require('../models/template');
+const SiteSetting = require('../models/siteSetting');
 const { stripHtml, truncateText, createExcerpt } = require('../utils/textHelpers');
 const pluginMiddleware = require('../middleware/pluginMiddleware');
+
+async function getTemplateAndSettings() {
+    const settings = await SiteSetting.getAll();
+    const templateName = await Template.getTemplate(settings.selected_template || 'default');
+    return { settings, templateName };
+}
 
 exports.getAllArticles = async (req, res) => {
     try {
@@ -11,11 +19,13 @@ exports.getAllArticles = async (req, res) => {
         const result = await Article.findAll(page, limit, false);
         const isViewCountEnabled = await Statistic.isViewCountEnabled();
         const isShowViewCountEnabled = await Statistic.isShowViewCountEnabled();
+        const { settings, templateName } = await getTemplateAndSettings();
 
-        res.render('home', {
+        res.render(`templates/${templateName}/home`, {
             ...result,
             isViewCountEnabled,
             isShowViewCountEnabled,
+            settings,
             helpers: { stripHtml, truncateText, createExcerpt }
         });
     } catch (error) {
@@ -49,16 +59,18 @@ exports.getArticle = [
 
             const isViewCountEnabled = await Statistic.isViewCountEnabled();
             const isShowViewCountEnabled = await Statistic.isShowViewCountEnabled();
+            const { settings, templateName } = await getTemplateAndSettings();
 
             if (isViewCountEnabled && article.id) {
                 await Statistic.incrementViewCount(article.id);
                 article.view_count = await Statistic.getViewCount(article.id);
             }
 
-            res.render('article', {
+            res.render(`templates/${templateName}/article`, {
                 article,
                 isViewCountEnabled,
                 isShowViewCountEnabled,
+                settings,
                 canonicalUrl: `${req.protocol}://${req.get('host')}/article/${article.slug}`
             });
         } catch (error) {
@@ -68,12 +80,11 @@ exports.getArticle = [
     }
 ];
 
-
 exports.adminDashboard = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
-        const limit = 10; // You can make this configurable
-        const result = await Article.findAll(page, limit, true); // true to include drafts
+        const limit = 10;
+        const result = await Article.findAll(page, limit, true);
         const isViewCountEnabled = await Statistic.isViewCountEnabled();
         const isShowViewCountEnabled = await Statistic.isShowViewCountEnabled();
 
@@ -179,7 +190,7 @@ exports.deleteArticle = async (req, res) => {
 exports.getArticlesByTag = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
-        const limit = 10; // You can make this configurable
+        const limit = 10;
         const tagName = req.params.tagName.toLowerCase();
         const result = await Article.findAll(page, limit, false);
         const filteredArticles = result.articles.filter(article =>
@@ -187,6 +198,7 @@ exports.getArticlesByTag = async (req, res) => {
         );
         const isViewCountEnabled = await Statistic.isViewCountEnabled();
         const isShowViewCountEnabled = await Statistic.isShowViewCountEnabled();
+        const { settings, templateName } = await getTemplateAndSettings();
 
         if (isViewCountEnabled) {
             for (let article of filteredArticles) {
@@ -194,7 +206,7 @@ exports.getArticlesByTag = async (req, res) => {
             }
         }
 
-        res.render('home', {
+        res.render(`templates/${templateName}/home`, {
             articles: filteredArticles,
             total: filteredArticles.length,
             page: page,
@@ -202,6 +214,7 @@ exports.getArticlesByTag = async (req, res) => {
             totalPages: Math.ceil(filteredArticles.length / limit),
             isViewCountEnabled,
             isShowViewCountEnabled,
+            settings,
             helpers: { stripHtml, truncateText, createExcerpt },
             tagName
         });
@@ -214,9 +227,9 @@ exports.getArticlesByTag = async (req, res) => {
 exports.toggleViewCount = async (req, res) => {
     try {
         const currentStatus = await Statistic.isViewCountEnabled();
-        console.log(`Current view count status: ${currentStatus}`); // Add logging
+        console.log(`Current view count status: ${currentStatus}`);
         await Statistic.setViewCountEnabled(!currentStatus);
-        console.log(`New view count status: ${!currentStatus}`); // Add logging
+        console.log(`New view count status: ${!currentStatus}`);
         res.redirect('/admin/dashboard');
     } catch (error) {
         console.error(error);
@@ -227,16 +240,15 @@ exports.toggleViewCount = async (req, res) => {
 exports.toggleShowViewCount = async (req, res) => {
     try {
         const currentStatus = await Statistic.isShowViewCountEnabled();
-        console.log(`Current show view count status: ${currentStatus}`); // Add logging
+        console.log(`Current show view count status: ${currentStatus}`);
         await Statistic.setShowViewCountEnabled(!currentStatus);
-        console.log(`New show view count status: ${!currentStatus}`); // Add logging
+        console.log(`New show view count status: ${!currentStatus}`);
         res.redirect('/admin/dashboard');
     } catch (error) {
         console.error(error);
         res.status(500).send('Server error');
     }
 };
-
 
 exports.searchArticles = async (req, res) => {
     try {

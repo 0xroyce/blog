@@ -3,10 +3,12 @@ const express = require('express');
 const session = require('express-session');
 const flash = require('connect-flash');
 const path = require('path');
+const fs = require('fs').promises;
 const articleRoutes = require('./routes/articleRoutes');
 const authRoutes = require('./routes/authRoutes');
 const SiteSetting = require('./models/siteSetting');
 const MenuItem = require('./models/menuItem');
+const Template = require('./models/template');
 const PluginLoader = require('./utils/pluginLoader');
 
 const app = express();
@@ -15,12 +17,25 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// Custom render function to handle template-based views
+app.use((req, res, next) => {
+    const _render = res.render;
+    res.render = function (view, options, callback) {
+        const template = res.locals.selectedTemplate || 'default';
+        if (view.startsWith('admin/') || view.startsWith('partials/') || view.startsWith('templates/')) {
+            _render.call(this, view, options, callback);
+        } else {
+            _render.call(this, `templates/${template}/${view}`, options, callback);
+        }
+    };
+    next();
+});
+
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-    secret: 'your-secret-key', // Change this to a secure random string
+    secret: process.env.SESSION_SECRET || 'your-secret-key',
     resave: false,
     saveUninitialized: true,
     cookie: { secure: process.env.NODE_ENV === 'production' }
@@ -46,15 +61,33 @@ app.set('pluginLoader', pluginLoader);
 // Add user to res.locals for use in views
 app.use((req, res, next) => {
     res.locals.user = req.session.username;
-    res.locals.tinyMceApiKey = process.env.TINYMCE_API_KEY; // Make API key available to templates
+    res.locals.tinyMceApiKey = process.env.TINYMCE_API_KEY;
     next();
 });
 
-// Add site settings and menu items to res.locals
+// Add site settings, menu items, selected template, and templateCSS to res.locals
 app.use(async (req, res, next) => {
-    res.locals.settings = await SiteSetting.getAll();
+    const settings = await SiteSetting.getAll();
+    res.locals.settings = settings;
     res.locals.menuItems = await MenuItem.getAll();
+    res.locals.selectedTemplate = await Template.getTemplate(settings.selected_template || 'default');
+    res.locals.templateName = res.locals.selectedTemplate;
     next();
+});
+
+// Serve static files from the main public directory
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Serve static files from the selected template, if any
+app.use(async (req, res, next) => {
+    const templateName = res.locals.selectedTemplate;
+    const templateStaticPath = path.join(__dirname, 'views', 'templates', templateName, 'public');
+    try {
+        await fs.access(templateStaticPath);
+        express.static(templateStaticPath)(req, res, next);
+    } catch (error) {
+        next();
+    }
 });
 
 // Make pluginLoader available to routes

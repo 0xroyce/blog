@@ -1,0 +1,391 @@
+/* Template1-specific styles */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding-top: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* Header styles */
+header {
+    background-color: #f4f4f4;
+    padding: 1rem;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.blog-title h1 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.blog-title a {
+    text-decoration: none;
+    color: #333;
+}
+
+nav {
+    flex-grow: 1;
+    text-align: center;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+}
+
+nav a:hover {
+    color: #666;
+}
+
+.search-form form {
+    display: flex;
+}
+
+.search-form input[type="text"] {
+    padding: 5px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+}
+
+.search-form button {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #4CAF50;
+    border-left: none;
+    cursor: pointer;
+    border-radius: 0 4px 4px 0;
+}
+
+.search-form button:hover {
+    background-color: #45a049;
+}
+
+a {
+    color: #333;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #666;
+}
+
+footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+/* Article styles */
+article {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+article h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.main-image {
+    margin-bottom: 20px;
+}
+
+.main-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.article-content {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    font-size: 1.1em;
+}
+
+.article-content img {
+    max-width: 100%;
+    height: auto;
+}
+
+.article-content blockquote {
+    border-left: 5px solid #ccc;
+    font-style: italic;
+    margin: 1.5em 10px;
+    padding: 0.5em 10px;
+}
+
+.article-content pre {
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-left: 3px solid #f36d33;
+    color: #666;
+    page-break-inside: avoid;
+    font-family: monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 1.6em;
+    max-width: 100%;
+    overflow: auto;
+    padding: 1em 1.5em;
+    display: block;
+    word-wrap: break-word;
+}
+
+.article-content code {
+    background-color: #f4f4f4;
+    border-radius: 3px;
+    font-family: monospace;
+    padding: 2px 4px;
+}
+
+.article-content table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.article-content thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+
+.article-content th,
+.article-content td {
+    padding: 12px 15px;
+}
+
+.article-content tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.article-content tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.article-content tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+/* Article preview styles */
+.article-preview {
+    margin-bottom: 2em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1em;
+}
+
+.article-preview h2 {
+    margin-bottom: 0.5em;
+}
+
+.article-preview .meta {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 1em;
+}
+
+.article-preview-image {
+    max-width: 100%;
+    height: auto;
+    margin: 1em 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.article-preview .excerpt {
+    line-height: 1.6;
+    margin-top: 1em;
+}
+
+.tags {
+    margin-bottom: 1em;
+}
+
+.tag {
+    display: inline-block;
+    background-color: #f1f1f1;
+    padding: 0.3em 0.6em;
+    margin-right: 0.5em;
+    margin-bottom: 0.5em;
+    border-radius: 3px;
+    color: #333;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+.tag:hover {
+    background-color: #e1e1e1;
+}
+
+/* Back link style */
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #f1f1f1;
+    color: #333;
+    text-decoration: none;
+    border-radius: 3px;
+}
+
+.back-link:hover {
+    background-color: #e1e1e1;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination a, .pagination span {
+    padding: 8px 16px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    margin: 0 4px;
+    color: #333;
+}
+
+.pagination a:hover {
+    background-color: #ddd;
+}
+
+.pagination .current-page {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #4CAF50;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+    }
+
+    .blog-title, nav, .search-form {
+        margin-bottom: 1rem;
+    }
+
+    nav ul li {
+        display: block;
+        margin: 0.5rem 0;
+    }
+
+    .search-form input[type="text"] {
+        width: 100%;
+    }
+}
+
+.main-menu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.main-menu > li {
+    display: inline-block;
+    position: relative;
+}
+
+.main-menu > li > a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #333;
+}
+
+.main-menu li:hover > a {
+    background-color: #f0f0f0;
+}
+
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 1000;
+    min-width: 150px;
+}
+
+.dropdown li {
+    display: block;
+}
+
+.dropdown a {
+    padding: 10px 15px;
+    display: block;
+    text-decoration: none;
+    color: #333;
+}
+
+.has-dropdown:hover .dropdown {
+    display: block;
+}
+
+/* For nested dropdowns */
+.dropdown .has-dropdown {
+    position: relative;
+}
+
+.dropdown .dropdown {
+    top: 0;
+    left: 100%;
+}
+
+@media (max-width: 768px) {
+    .main-menu > li {
+        display: block;
+    }
+
+    .dropdown {
+        position: static;
+        display: none;
+        box-shadow: none;
+    }
+
+    .has-dropdown.active > .dropdown {
+        display: block;
+    }
+
+    .dropdown .dropdown {
+        margin-left: 20px;
+    }
+}
