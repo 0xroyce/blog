@@ -3,5 +3,14 @@
     <p>&copy; <%= new Date().getFullYear() %> <%= settings.blog_title %>. All rights reserved.</p>
 </footer>
 <script src="/js/menu.js"></script>
+<% console.log('Plugins in footer:', plugins); %>
+<% if (plugins && plugins.length > 0) { %>
+    <% plugins.forEach(function(plugin) { %>
+        <% console.log('Adding script:', plugin); %>
+        <script src="<%= plugin %>"></script>
+    <% }); %>
+<% } else { %>
+    <% console.log('No plugins to add in footer'); %>
+<% } %>
 </body>
 </html>

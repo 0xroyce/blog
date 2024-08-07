@@ -36,15 +36,24 @@ exports.listPlugins = async (req, res) => {
 
 exports.renderPluginConfig = async (req, res) => {
     const pluginName = req.params.pluginName;
-    const pluginPath = path.join(__dirname, '..', 'plugins', pluginName, 'index.js');
+    const pluginPath = path.join(__dirname, '..', 'plugins', pluginName, 'views', 'plugin-config.ejs');
 
     try {
-        const pluginModule = require(pluginPath);
-        if (typeof pluginModule.renderConfigPage === 'function') {
-            await pluginModule.renderConfigPage(req, res);
-        } else {
-            res.status(404).send('Plugin configuration page not found');
+        const isEnabled = await SiteSetting.getPluginStatus(pluginName);
+
+        let additionalData = {};
+        if (pluginName === 'mid-article-image') {
+            const currentImageUrl = await SiteSetting.get('mid_article_image_url') || '';
+            additionalData = { currentImageUrl };
         }
+
+        res.render(pluginPath, {
+            pluginName: pluginName,
+            isEnabled: isEnabled,
+            headerPath: path.join(__dirname, '../views/partials/admin/header'),
+            footerPath: path.join(__dirname, '../views/partials/admin/footer'),
+            ...additionalData
+        });
     } catch (error) {
         console.error(`Error rendering plugin config for ${pluginName}:`, error);
         res.status(500).send('Error loading plugin configuration');

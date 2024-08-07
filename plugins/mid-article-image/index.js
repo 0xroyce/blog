@@ -1,3 +1,4 @@
+const path = require('path');
 const SiteSetting = require('../../models/siteSetting');
 
 module.exports = {
@@ -34,10 +35,12 @@ module.exports = {
     renderConfigPage: async function(req, res) {
         const currentImageUrl = await SiteSetting.get('mid_article_image_url') || '';
         const isEnabled = await SiteSetting.getPluginStatus('Mid-Article Image');
-        res.render('admin/plugin-config', {
+        res.render(path.resolve(__dirname, 'views', 'plugin-config'), {
             pluginName: 'Mid-Article Image',
             currentImageUrl: currentImageUrl,
-            isEnabled: isEnabled
+            isEnabled: isEnabled,
+            headerPath: path.join(__dirname, '../../../views/partials/admin/header'),
+            footerPath: path.join(__dirname, '../../../views/partials/admin/footer')
         });
     },
 

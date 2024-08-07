@@ -1,0 +1,21 @@
+<%- include(headerPath) %>
+
+<div class="container">
+    <h1><%= pluginName %> Configuration</h1>
+
+    <form action="/admin/plugins/mid-article-image" method="POST">
+        <div>
+            <label for="imageUrl">Image URL:</label>
+            <input type="text" id="imageUrl" name="imageUrl" value="<%= currentImageUrl %>" required>
+        </div>
+        <div>
+            <label for="isEnabled">
+                <input type="checkbox" id="isEnabled" name="isEnabled" <%= isEnabled ? 'checked' : '' %>>
+                Enable Plugin
+            </label>
+        </div>
+        <button type="submit">Update Configuration</button>
+    </form>
+</div>
+
+<%- include(footerPath) %>

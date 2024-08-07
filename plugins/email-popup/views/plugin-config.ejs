@@ -1,13 +1,9 @@
-<%- include('../partials/admin/header') %>
+<%- include(headerPath) %>
 
 <div class="container">
     <h1><%= pluginName %> Configuration</h1>
 
-    <form action="/admin/plugins/mid-article-image" method="POST">
-        <div>
-            <label for="imageUrl">Image URL:</label>
-            <input type="text" id="imageUrl" name="imageUrl" value="<%= currentImageUrl %>" required>
-        </div>
+    <form action="/admin/plugins/email-popup" method="POST">
         <div>
             <label for="isEnabled">
                 <input type="checkbox" id="isEnabled" name="isEnabled" <%= isEnabled ? 'checked' : '' %>>
@@ -18,4 +14,6 @@
     </form>
 </div>
 
-<%- include('../partials/admin/footer') %>
+<%- include(footerPath) %>
+
+
